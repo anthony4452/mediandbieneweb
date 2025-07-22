@@ -10,6 +10,10 @@
         </a>
     </div>
 
+    <div class="mb-3">
+        <input type="text" id="buscar-proposito" class="form-control" placeholder="Buscar propósito por nombre...">
+    </div>
+
     <div class="table-responsive shadow-sm rounded">
         <table class="table table-hover table-bordered" id="propositos" style="min-width: 700px;">
             <thead class="table-primary text-center align-middle">
@@ -53,8 +57,10 @@
 {% endblock %}
 
 {% block extra_js %}
+
 <script>
   $(document).ready(function() {
+      // DataTables config
       $('#propositos').DataTable({
           buttons: ['copy', 'excel', 'pdf', 'print', 'colvis'],
           dom: 'Bfrtip',
@@ -67,6 +73,25 @@
           columnDefs: [
               { orderable: false, targets: [6] }
           ]
+      });
+
+      const propositos = [
+        {% for p in propositos %}
+            "{{ p.nombre|escapejs }}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ];
+
+      $("#buscar-proposito").autocomplete({
+          source: propositos
+      });
+
+      // Filtrado simple de la tabla basado en input
+      $("#buscar-proposito").on("input", function () {
+        const texto = $(this).val().toLowerCase();
+        $("#propositos tbody tr").each(function () {
+          const nombre = $(this).find("td:first").text().toLowerCase();
+          $(this).toggle(nombre.includes(texto));
+        });
       });
   });
 

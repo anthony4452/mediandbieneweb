@@ -76,16 +76,57 @@
           <td>{{ mensaje.titulo }}</td>
           <td>{{ mensaje.destinatario }}</td>
           <td>{{ mensaje.asunto }}</td>
-          <td>
+          <td class="text-center">
             {% if mensaje.archivo %}
-              <a href="{{ mensaje.archivo.url }}" target="_blank">Ver</a>
-            {% else %}-{% endif %}
+              <div class="mb-2">
+                <iframe 
+                  src="{{ mensaje.archivo.url }}" 
+                  width="240" 
+                  height="160" 
+                  style="border: 1px solid #ccc; border-radius: 4px;">
+                </iframe>
+              </div>
+              <p class="text-truncate" style="max-width: 200px; margin: 0 auto;">
+                {{ mensaje.archivo.name|slice:"7:" }}
+              </p>
+              <div class="d-flex justify-content-center gap-2 mt-2">
+                <a href="{{ mensaje.archivo.url }}" download class="btn btn-sm btn-outline-primary" title="Descargar PDF">
+                  <i class="fa fa-download"></i>
+                </a>
+                <a href="{{ mensaje.archivo.url }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Ver en pestaña">
+                  <i class="fa fa-eye"></i>
+                </a>
+              </div>
+            {% else %}
+              <span class="text-muted">Sin archivo</span>
+            {% endif %}
           </td>
-          <td>
+          
+          <td class="text-center">
             {% if mensaje.factura %}
-              <a href="{{ mensaje.factura.url }}" target="_blank">Ver</a>
-            {% else %}-{% endif %}
+              <div class="mb-2">
+                <img 
+                  src="{{ mensaje.factura.url }}" 
+                  alt="Factura" 
+                  style="max-width: 240px; max-height: 160px; border: 1px solid #ccc; border-radius: 4px; object-fit: contain;"
+                >
+              </div>
+              <p class="text-truncate" style="max-width: 200px; margin: 0 auto;">
+                {{ mensaje.factura.name|slice:"7:" }}
+              </p>
+              <div class="d-flex justify-content-center gap-2 mt-2">
+                <a href="{{ mensaje.factura.url }}" download class="btn btn-sm btn-outline-primary" title="Descargar imagen">
+                  <i class="fa fa-download"></i>
+                </a>
+                <a href="{{ mensaje.factura.url }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Ver en pestaña">
+                  <i class="fa fa-eye"></i>
+                </a>
+              </div>
+            {% else %}
+              <span class="text-muted">Sin factura</span>
+            {% endif %}
           </td>
+          
           <td>{{ mensaje.fecha|date:"d/m/Y H:i" }}</td>
           <td class="text-center">
             <div class="btn-group">

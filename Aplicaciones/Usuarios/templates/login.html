@@ -21,7 +21,7 @@
                 <img src="{% static 'plantilla/seodash/src/assets/images/logos/logo-light.svg' %}" alt="">
               </a>
               <p class="text-center">Bienvenido al sistema</p>
-              <form method="POST" action="{% url 'login' %}">
+              <form method="POST" action="{% url 'login' %}" id="mi-formulario" class="mt-4">
                 {% csrf_token %}
                 <div class="mb-3">
                   <label for="username" class="form-label">Usuario</label>
@@ -52,5 +52,10 @@
 <script src="{% static 'plantilla/seodash/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'plantilla/seodash/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+<script>
+  document.getElementById('mi-formulario').addEventListener('submit', function () {
+    document.getElementById('spinner').style.display = 'block';
+  });
+</script>
 </body>
 </html>

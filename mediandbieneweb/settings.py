@@ -139,3 +139,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediandbieneweb', 'media')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Debug
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+
+# En producción con dominio HTTPS
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['https://mediandbieneweb.up.railway.app']
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'ERROR',
+    },
+}

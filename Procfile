@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mediandbieneweb.wsgi
+web: python manage.py migrate && python create_superuser.py && python manage.py collectstatic --noinput && gunicorn mediandbieneweb.wsgi

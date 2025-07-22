@@ -1,0 +1,84 @@
+{% extends './plantilla.html' %}
+
+{% block content %}
+<div class="row col-md-12 justify-content-center mt-5">
+  <div class="col-md-6 bg-light p-4 rounded">
+    <h1 class="fa fa-plus mb-4"> Nueva Sesión de Meditación</h1>
+
+    <form action="{% url 'guardar_sesion' %}" method="POST" id="frm_nueva_sesion">
+      {% csrf_token %}
+
+      <div class="form-group mb-3">
+        <label for="proposito">Propósito</label>
+        <select 
+          class="form-control selectpicker" 
+          name="proposito" 
+          id="proposito" 
+          data-live-search="true" 
+          title="Seleccione un propósito"
+          required>
+          {% for p in propositos %}
+          <option value="{{ p.id }}">{{ p.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="fecha">Fecha</label>
+        <input class="form-control" type="date" name="fecha" id="fecha" required />
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="duracion_minutos">Duración (minutos)</label>
+        <input class="form-control" type="number" name="duracion_minutos" id="duracion_minutos" min="1" required />
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="calificacion">Calificación (0-10)</label>
+        <input class="form-control" type="number" name="calificacion" id="calificacion" min="0" max="10" required />
+      </div>
+
+      <div class="form-group mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-success">Guardar</button>
+        <a href="{% url 'calendario_sesiones' %}" class="btn btn-outline-danger">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Bootstrap Select CSS y JS deben estar cargados en tu plantilla base -->
+<script>
+  $(document).ready(function () {
+    // Inicializa Bootstrap Select
+    $('#proposito').selectpicker();
+
+    // Validación formulario con jQuery Validate
+    $("#frm_nueva_sesion").validate({
+      rules: {
+        proposito: { required: true },
+        fecha: { required: true, date: true },
+        duracion_minutos: { required: true, digits: true, min: 1 },
+        calificacion: { required: true, digits: true, min: 0, max: 10 }
+      },
+      messages: {
+        proposito: { required: "Seleccione un propósito" },
+        fecha: { required: "Ingrese una fecha válida" },
+        duracion_minutos: { required: "Ingrese duración en minutos", digits: "Sólo números", min: "Debe ser mayor a 0" },
+        calificacion: { required: "Ingrese calificación", digits: "Sólo números", min: "Mínimo 0", max: "Máximo 10" }
+      },
+      errorPlacement: function(error, element) {
+        error.addClass('text-danger mt-1');
+        error.insertAfter(element);
+      },
+      highlight: function(element) {
+        $(element).addClass("is-invalid");
+      },
+      unhighlight: function(element) {
+        $(element).removeClass("is-invalid");
+      }
+    });
+  });
+</script>
+{% endblock %}

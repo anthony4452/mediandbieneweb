@@ -1,0 +1,49 @@
+{% extends './plantilla.html' %}
+
+{% block extra_css %}
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Calendario de Sesiones de Meditación</h2>
+
+    <div class="mb-3 text-center">
+        <a href="{% url 'nuevo_sesion' %}" class="btn btn-success">
+            <i class="fa fa-plus"></i> Nueva Sesión
+        </a>
+    </div>
+
+    <div id='calendar'></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'es',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,listWeek'
+      },
+      navLinks: true,
+      events: "{% url 'sesiones_api' %}",
+      eventColor: '#378006',
+      eventClick: function(info) {
+        // Aquí podrías redirigir a la edición de la sesión
+        window.location.href = `/sesiones/editar/${info.event.id}/`;
+      }
+    });
+
+    calendar.render();
+  });
+</script>
+{% endblock %}

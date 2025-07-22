@@ -14,6 +14,10 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" />
 
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/css/fileinput.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/themes/fas/theme.min.css" rel="stylesheet" />
+
   <!-- Estilos personalizados -->
    <style>
     /* Tema oscuro base */
@@ -338,6 +342,12 @@
                 </a>
               </li>
               <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'mensajes' %}">
+                  <iconify-icon icon="solar:chat-round-unread-bold-duotone" class="fs-6"></iconify-icon>
+                  <span class="hide-menu">Mensajes</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
                 <a class="sidebar-link" href="{% url 'sesiones_list' %}">
                   <iconify-icon icon="solar:meditation-bold-duotone" class="fs-6"></iconify-icon>
                   <span class="hide-menu">Gestionar Sesiones</span>
@@ -372,7 +382,7 @@
               <span class="hide-menu">CUENTA</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="#" onclick="alert('Funcionalidad en desarrollo')">
+              <a class="sidebar-link" href="#" onclick="AvisoTrabajo()">
                 <iconify-icon icon="solar:user-bold-duotone" class="fs-6"></iconify-icon>
                 <span class="hide-menu">Mi Perfil</span>
               </a>
@@ -434,6 +444,14 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
+<!-- Bootstrap FileInput -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/js/fileinput.min.js" integrity="sha512-0wQvB58Ha5coWmcgtg4f11CTSSxfrfLClUp9Vy0qhzYzCZDSnoB4Vhu5JXJFs7rU24LE6JsH+6hpP7vQ22lk5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Bootstrap FileInput Español -->
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/locales/es.js"></script>
+
+
+
     {% if messages%}
          {%for mensaje in messages%}
             <script>
@@ -446,7 +464,11 @@
          {%endfor%}
     {%endif%}
 
-
+<script>
+  function AvisoTrabajo() {
+    Swal.fire("Estamos trabajando en este apartado", "¡Gracias por su colaboración!", "info");
+  }
+</script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

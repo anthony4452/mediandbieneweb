@@ -82,26 +82,44 @@ def guardarSesion(request):
             messages.error(request, "Duración y calificación deben ser números válidos")
             return redirect('nuevo_sesion')
 
-        SesionMeditacion.objects.create(
+        sesion = SesionMeditacion.objects.create(
             usuario=usuario,
             proposito=proposito,
             fecha=fecha,
             duracion_minutos=duracion,
             calificacion=calificacion
         )
+
+        # Enviar correo con la sesión recién creada
+        enviar_correo_sesion(sesion)
+
         messages.success(request, "Sesión guardada correctamente")
         return redirect('calendario_sesiones')
     else:
         return redirect('nuevo_sesion')
 
+
 @login_required
 def editarSesion(request, id):
-    sesion = get_object_or_404(SesionMeditacion, pk=id, usuario=request.user)
+    user = request.user
+
+    if user.is_staff or (hasattr(user, 'perfilusuario') and user.perfilusuario.rol == 'admin'):
+        sesion = get_object_or_404(SesionMeditacion, pk=id)
+    else:
+        sesion = get_object_or_404(SesionMeditacion, pk=id, usuario=user)
+
     propositos = Proposito.objects.filter(activo=True).order_by('nombre')
     return render(request, 'editarSesion.html', {'sesion': sesion, 'propositos': propositos})
 
 @login_required
 def guardarEdicionSesion(request, id):
+    user = request.user
+
+    if user.is_staff or (hasattr(user, 'perfilusuario') and user.perfilusuario.rol == 'admin'):
+        sesion = get_object_or_404(SesionMeditacion, pk=id)
+    else:
+        sesion = get_object_or_404(SesionMeditacion, pk=id, usuario=user)
+
     if request.method == "POST":
         sesion = get_object_or_404(SesionMeditacion, pk=id, usuario=request.user)
 
@@ -151,3 +169,5 @@ def eliminarSesion(request, id):
         # Si es GET o directo, solo redirige o muestra un error simple
         messages.error(request, "Acción no permitida.")
         return redirect('sesiones_list')
+    
+

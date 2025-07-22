@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('Aplicaciones.Usuarios.urls')), 
     path('propositos/', include('Aplicaciones.Proposito.urls')),
     path('sesiones/', include('Aplicaciones.SesionMeditacion.urls')),
+    path('mensajes/', include('Aplicaciones.Mensajes.urls')),
 ]

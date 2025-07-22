@@ -1,0 +1,167 @@
+{% extends 'plantilla.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <!-- Formulario centrado -->
+  <div class="mx-auto" style="max-width: 600px;">
+    <h4 class="mb-3 text-center">{% if mensaje_editar %}Editar{% else %}Nuevo{% endif %} Mensaje</h4>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'listarMensaje' %}" id="frm_mensaje" class="p-4 bg-light rounded shadow-sm border">
+      {% csrf_token %}
+      <input type="hidden" name="id_mensaje" value="{{ mensaje_editar.id|default:'' }}">
+
+      <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input type="text" name="titulo" id="titulo" class="form-control" value="{{ mensaje_editar.titulo|default:'' }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="destinatario" class="form-label">Correo destinatario</label>
+        <input type="email" name="destinatario" id="destinatario" class="form-control" value="{{ mensaje_editar.destinatario|default:'' }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="asunto" class="form-label">Asunto</label>
+        <input type="text" name="asunto" id="asunto" class="form-control" value="{{ mensaje_editar.asunto|default:'' }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="mensaje" class="form-label">Mensaje</label>
+        <textarea name="mensaje" id="mensaje" class="form-control" rows="4" required>{{ mensaje_editar.mensaje|default:'' }}</textarea>
+      </div>
+
+      <!-- Row con Archivo y Factura -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="archivo" class="form-label">Archivo Adjunto</label>
+          <input type="file" name="archivo" id="archivo" class="form-control">
+          {% if mensaje_editar.archivo %}
+            <p class="mt-2 mb-0">Archivo actual: <a href="{{ mensaje_editar.archivo.url }}" target="_blank">Ver</a></p>
+          {% endif %}
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="factura" class="form-label">Factura</label>
+          <input type="file" name="factura" id="factura" class="form-control">
+          {% if mensaje_editar.factura %}
+            <p class="mt-2 mb-0">Factura actual: <a href="{{ mensaje_editar.factura.url }}" target="_blank">Ver</a></p>
+          {% endif %}
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">
+        {% if mensaje_editar %}Actualizar{% else %}Guardar{% endif %}
+      </button>
+    </form>
+  </div>
+
+  <!-- Tabla abajo con margen superior -->
+  <div class="mt-5">
+    <h4 class="mb-3">Mensajes registrados</h4>
+    <table class="table table-bordered table-striped" id="tbl_mensajes">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Destinatario</th>
+          <th>Asunto</th>
+          <th>Archivo</th>
+          <th>Factura</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for mensaje in mensajes %}
+        <tr>
+          <td>{{ mensaje.id }}</td>
+          <td>{{ mensaje.titulo }}</td>
+          <td>{{ mensaje.destinatario }}</td>
+          <td>{{ mensaje.asunto }}</td>
+          <td>
+            {% if mensaje.archivo %}
+              <a href="{{ mensaje.archivo.url }}" target="_blank">Ver</a>
+            {% else %}-{% endif %}
+          </td>
+          <td>
+            {% if mensaje.factura %}
+              <a href="{{ mensaje.factura.url }}" target="_blank">Ver</a>
+            {% else %}-{% endif %}
+          </td>
+          <td>{{ mensaje.fecha|date:"d/m/Y H:i" }}</td>
+          <td class="text-center">
+            <div class="btn-group">
+              <a href="{% url 'editarMensaje' mensaje.id %}" class="btn btn-sm btn-outline-warning">
+                <i class="fas fa-edit"></i> Editar
+              </a>
+              <a href="{% url 'eliminarMensaje' mensaje.id %}" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-trash"></i> Eliminar
+              </a>
+              <a href="{% url 'enviar_mensaje' mensaje.id %}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-paper-plane"></i> Enviar
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" class="text-center">No hay mensajes</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function () {
+  // VALIDACION
+  $("#frm_mensaje").validate({
+    rules: {
+      destinatario: { required: true, email: true },
+      asunto: { required: true },
+      mensaje: { required: true }
+    },
+    messages: {
+      destinatario: { required: "Correo obligatorio", email: "Correo inválido" },
+      asunto: { required: "Asunto obligatorio" },
+      mensaje: { required: "Mensaje obligatorio" }
+    },
+    errorClass: "is-invalid",
+    validClass: "is-valid",
+    errorElement: "div",
+    errorPlacement: function(error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".mb-3").append(error);
+    }
+  });
+
+  // FILEINPUT para archivo
+  $("#archivo").fileinput({
+    theme: "fas",
+    language: "es",
+    allowedFileExtensions: ["pdf", "jpg", "jpeg", "png"],
+    showPreview: true,
+    showUpload: false,
+    browseLabel: "Seleccionar Archivo"
+  });
+
+  // FILEINPUT para factura
+  $("#factura").fileinput({
+    theme: "fas",
+    language: "es",
+    allowedFileExtensions: ["pdf", "jpg", "jpeg", "png"],
+    showPreview: true,
+    showUpload: false,
+    browseLabel: "Seleccionar Factura"
+  });
+
+  // DATATABLE
+  $('#tbl_mensajes').DataTable({
+    buttons: ['copy', 'excel', 'pdf', 'print', 'colvis'],
+    dom: 'Bfrtip',
+    language: {
+      url: 'https://cdn.datatables.net/plug-ins/2.3.1/i18n/es-ES.json'
+    }
+  });
+});
+</script>
+{% endblock %}

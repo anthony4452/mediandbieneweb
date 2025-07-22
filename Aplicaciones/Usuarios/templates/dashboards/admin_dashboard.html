@@ -21,9 +21,9 @@
     </div>
   </div>
 
-  <div class="row mt-4">
+  <div class="row mt-3">
     <!-- Gestión de Propósitos -->
-    <div class="col-lg-4 col-md-6">
+    <div class="col-lg-3 col-md-6">
       <div class="card">
         <div class="card-body text-center">
           <div class="mb-3">
@@ -40,7 +40,7 @@
     </div>
 
     <!-- Gestión de Sesiones -->
-    <div class="col-lg-4 col-md-6">
+    <div class="col-lg-3 col-md-6">
       <div class="card">
         <div class="card-body text-center">
           <div class="mb-3">
@@ -55,9 +55,26 @@
         </div>
       </div>
     </div>
+          <!-- Mensaje -->
+    <div class="col-lg-3 col-md-6">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="mb-3">
+            <iconify-icon icon="solar:calendar-bold-duotone" class="fs-1 text-warning"></iconify-icon>
+          </div>
+          <h5 class="card-title">Mensajes</h5>
+          <p class="card-text text-muted">Enviar Correos con Información de Sesiones</p>
+          <a href="{% url 'mensajes' %}" class="btn btn-warning">
+            <iconify-icon icon="solar:calendar-bold" class="me-1"></iconify-icon>
+            Ver Calendario
+          </a>
+        </div>
+      </div>
+    </div>
+  
 
     <!-- Calendario -->
-    <div class="col-lg-4 col-md-6">
+    <div class="col-lg-3 col-md-6">
       <div class="card">
         <div class="card-body text-center">
           <div class="mb-3">
@@ -73,6 +90,8 @@
       </div>
     </div>
   </div>
+
+
 
   <div class="row mt-4">
     <!-- Estadísticas Rápidas -->
@@ -148,6 +167,12 @@
               <a href="{% url 'nuevo_sesion' %}" class="btn btn-outline-info w-100">
                 <iconify-icon icon="solar:add-square-bold-duotone" class="me-2"></iconify-icon>
                 Programar Nueva Sesión
+              </a>
+            </div>
+            <div class="col-md-16 mb-3">
+              <a href="{% url 'mensajes' %}" class="btn btn-outline-info w-100">
+                <iconify-icon icon="solar:chat-round-unread-bold-duotone" class="me-2"></iconify-icon>
+                Enviar Correo
               </a>
             </div>
           </div>

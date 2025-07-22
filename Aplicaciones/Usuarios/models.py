@@ -1,3 +1,9 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Create your models here.
+class Usuarios(AbstractUser):
+    ROLES = (
+        ('ADMINISTRADOR', 'Administrador'),
+        ('USUARIO', 'Usuario'),
+    )
+    rol = models.CharField(max_length=20, choices=ROLES, default='USUARIO')

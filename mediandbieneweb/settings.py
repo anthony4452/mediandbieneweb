@@ -8,8 +8,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Redirección de login
+AUTH_USER_MODEL = 'Usuarios.Usuarios'
+
 LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = '/admin_dashboard/'
+LOGIN_REDIRECT_URL = '/usuario_dashboard/'  # o lo que necesites
+LOGOUT_REDIRECT_URL = '/'
+
+
+
 
 # Seguridad
 SECRET_KEY = os.getenv('SECRET_KEY', 'clave-secreta-local')
@@ -29,7 +35,6 @@ INSTALLED_APPS = [
     'Aplicaciones.Usuarios',
     'Aplicaciones.Proposito',
     'Aplicaciones.SesionMeditacion',
-    'Aplicaciones.Dashboard',
 ]
 
 MIDDLEWARE = [
@@ -73,7 +78,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mediandbienedb',
+            'NAME': 'mediandbieneweb',
             'USER': 'postgres',
             'PASSWORD': 'anthoo',
             'HOST': '127.0.0.1',

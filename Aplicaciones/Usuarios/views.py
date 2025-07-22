@@ -1,14 +1,11 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-
-from django.contrib import messages
-from django.shortcuts import render, redirect
 
 def register_view(request):
     if request.method == 'POST':
@@ -67,3 +64,17 @@ def usuario_dashboard(request):
     if request.user.rol != 'USUARIO':
         return HttpResponseForbidden("No tienes permiso.")
     return render(request, 'dashboards/usuario_dashboard.html')
+
+@login_required
+def dashboard_redirect(request):
+    """Vista genérica que redirige al dashboard según el rol del usuario"""
+    if request.user.rol == 'ADMINISTRADOR':
+        return redirect('admin_dashboard')
+    else:
+        return redirect('usuario_dashboard')
+
+def logout_view(request):
+    """Vista personalizada para logout"""
+    logout(request)
+    messages.success(request, 'Has cerrado sesión correctamente.')
+    return redirect('login')

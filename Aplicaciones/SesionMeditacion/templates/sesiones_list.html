@@ -1,4 +1,4 @@
-{% extends './plantilla.html' %}
+{% extends 'plantilla.html' %}
 
 {% block content %}
 <div class="container mt-5">
@@ -24,7 +24,13 @@
       <tbody>
         {% for s in sesiones %}
         <tr>
-          <td>{{ s.proposito.nombre if s.proposito else 'Sin propósito' }}</td>
+          <td>
+          {% if s.proposito %}
+            {{ s.proposito.nombre }}
+          {% else %}
+            Sin propósito
+          {% endif %}
+          </td>
           <td class="text-center">{{ s.fecha|date:"d/m/Y" }}</td>
           <td class="text-center">{{ s.duracion_minutos }}</td>
           <td class="text-center">{{ s.calificacion }}/10</td>

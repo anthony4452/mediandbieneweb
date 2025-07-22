@@ -1,0 +1,159 @@
+{% extends 'plantilla.html' %}
+{% load static %}  
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <h4 class="card-title mb-0">Panel de Administración</h4>
+              <p class="text-muted mb-0">Bienvenido {{ user.username }}, gestiona el sistema desde aquí</p>
+            </div>
+            <div class="col-auto">
+              <iconify-icon icon="solar:settings-bold-duotone" class="fs-8 text-primary"></iconify-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <!-- Gestión de Propósitos -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="mb-3">
+            <iconify-icon icon="solar:target-bold-duotone" class="fs-1 text-success"></iconify-icon>
+          </div>
+          <h5 class="card-title">Gestionar Propósitos</h5>
+          <p class="card-text text-muted">Administra todos los propósitos de meditación del sistema</p>
+          <a href="{% url 'propositos' %}" class="btn btn-success">
+            <iconify-icon icon="solar:eye-bold" class="me-1"></iconify-icon>
+            Ver Propósitos
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gestión de Sesiones -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="mb-3">
+            <iconify-icon icon="solar:meditation-bold-duotone" class="fs-1 text-info"></iconify-icon>
+          </div>
+          <h5 class="card-title">Gestionar Sesiones</h5>
+          <p class="card-text text-muted">Supervisa y administra todas las sesiones de meditación</p>
+          <a href="{% url 'sesiones_list' %}" class="btn btn-info">
+            <iconify-icon icon="solar:list-bold" class="me-1"></iconify-icon>
+            Ver Sesiones
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendario -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="mb-3">
+            <iconify-icon icon="solar:calendar-bold-duotone" class="fs-1 text-warning"></iconify-icon>
+          </div>
+          <h5 class="card-title">Calendario General</h5>
+          <p class="card-text text-muted">Vista completa del calendario de sesiones</p>
+          <a href="{% url 'calendario_sesiones' %}" class="btn btn-warning">
+            <iconify-icon icon="solar:calendar-bold" class="me-1"></iconify-icon>
+            Ver Calendario
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <!-- Estadísticas Rápidas -->
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <iconify-icon icon="solar:chart-bold-duotone" class="me-2"></iconify-icon>
+            Resumen del Sistema
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-md-3">
+              <div class="border-end">
+                <h3 class="text-primary mb-1">
+                  <iconify-icon icon="solar:users-group-two-rounded-bold-duotone"></iconify-icon>
+                </h3>
+                <p class="text-muted mb-0">Usuarios Totales</p>
+                <small class="text-muted">Sistema completo</small>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="border-end">
+                <h3 class="text-success mb-1">
+                  <iconify-icon icon="solar:target-bold-duotone"></iconify-icon>
+                </h3>
+                <p class="text-muted mb-0">Propósitos Activos</p>
+                <small class="text-muted">En el sistema</small>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="border-end">
+                <h3 class="text-info mb-1">
+                  <iconify-icon icon="solar:meditation-bold-duotone"></iconify-icon>
+                </h3>
+                <p class="text-muted mb-0">Sesiones Totales</p>
+                <small class="text-muted">Todas las sesiones</small>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <h3 class="text-warning mb-1">
+                <iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon>
+              </h3>
+              <p class="text-muted mb-0">Sesiones Hoy</p>
+              <small class="text-muted">Programadas</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <!-- Acciones Rápidas -->
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <iconify-icon icon="solar:bolt-bold-duotone" class="me-2"></iconify-icon>
+            Acciones Rápidas
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <a href="{% url 'nuevo_proposito' %}" class="btn btn-outline-success w-100">
+                <iconify-icon icon="solar:add-circle-bold-duotone" class="me-2"></iconify-icon>
+                Crear Nuevo Propósito
+              </a>
+            </div>
+            <div class="col-md-6 mb-3">
+              <a href="{% url 'nuevo_sesion' %}" class="btn btn-outline-info w-100">
+                <iconify-icon icon="solar:add-square-bold-duotone" class="me-2"></iconify-icon>
+                Programar Nueva Sesión
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

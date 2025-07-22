@@ -7,6 +7,8 @@ from Aplicaciones.Proposito.models import Proposito
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.dateparse import parse_date
+from django.db import IntegrityError
+
 
 User = get_user_model()
 
@@ -128,7 +130,16 @@ def guardarEdicionSesion(request, id):
 
 @login_required
 def eliminarSesion(request, id):
-    sesion = get_object_or_404(SesionMeditacion, pk=id, usuario=request.user)
-    sesion.delete()
-    messages.success(request, "Sesión eliminada correctamente")
-    return redirect('calendario_sesiones')
+    sesion = get_object_or_404(SesionMeditacion, pk=id)
+    if request.method == "POST":
+        try:
+            sesion.delete()
+            messages.success(request, "Sesión eliminada correctamente")
+            return redirect('sesiones_list')
+        except IntegrityError:
+            messages.error(request, "No se puede eliminar esta sesión porque tiene datos relacionados.")
+            return redirect('sesiones_list')
+    else:
+        # Si es GET o directo, solo redirige o muestra un error simple
+        messages.error(request, "Acción no permitida.")
+        return redirect('sesiones_list')

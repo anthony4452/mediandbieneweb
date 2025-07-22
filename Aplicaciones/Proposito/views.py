@@ -4,7 +4,7 @@ from .models import Proposito
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 def es_admin(user):
-    return hasattr(user, 'perfilusuario') and user.perfilusuario.rol == 'admin'
+    return user.is_staff or (hasattr(user, 'perfilusuario') and user.perfilusuario.rol.upper() in ['ADMIN', 'ADMINISTRADOR'])
 
 @login_required
 @user_passes_test(es_admin)

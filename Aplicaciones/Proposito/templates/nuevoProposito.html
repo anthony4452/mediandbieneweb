@@ -20,7 +20,15 @@
 
       <div class="form-group mb-3">
         <label for="categoria">Categoría</label>
-        <input class="form-control" type="text" name="categoria" id="categoria" />
+        <select class="selectpicker form-control" data-live-search="true" name="categoria" id="categoria">
+          <option value="">Seleccione una categoría</option>
+          <option value="Salud">Salud</option>
+          <option value="Trabajo">Trabajo</option>
+          <option value="Espiritualidad">Espiritualidad</option>
+          <option value="Educación">Educación</option>
+          <option value="Relaciones">Relaciones</option>
+          <!-- Más categorías aquí -->
+        </select>
       </div>
 
       <div class="form-check mb-3">
@@ -40,11 +48,15 @@
 {% block extra_js %}
 <script>
   $(document).ready(function () {
+    // Inicializar Bootstrap Select
+    $('.selectpicker').selectpicker();
+
+    // Validación
     $("#frm_nuevo_proposito").validate({
       rules: {
         nombre: { required: true, minlength: 2, maxlength: 100 },
         descripcion: { maxlength: 500 },
-        categoria: { maxlength: 50 }
+        categoria: { required: true }
       },
       messages: {
         nombre: {
@@ -56,18 +68,31 @@
           maxlength: "No debe superar los 500 caracteres"
         },
         categoria: {
-          maxlength: "No debe superar los 50 caracteres"
+          required: "Seleccione una categoría"
         }
       },
       errorPlacement: function(error, element) {
+        // Ajuste para que el mensaje salga bien en el selectpicker
+        if (element.hasClass('selectpicker')) {
+          error.insertAfter(element.parent());
+        } else {
+          error.insertAfter(element);
+        }
         error.addClass('text-danger mt-1');
-        error.insertAfter(element);
       },
       highlight: function(element) {
-        $(element).addClass("is-invalid");
+        if ($(element).hasClass('selectpicker')) {
+          $(element).parent().addClass("is-invalid");
+        } else {
+          $(element).addClass("is-invalid");
+        }
       },
       unhighlight: function(element) {
-        $(element).removeClass("is-invalid");
+        if ($(element).hasClass('selectpicker')) {
+          $(element).parent().removeClass("is-invalid");
+        } else {
+          $(element).removeClass("is-invalid");
+        }
       }
     });
   });

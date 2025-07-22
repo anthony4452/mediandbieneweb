@@ -19,8 +19,10 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.min.js"></script>
+
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -35,10 +37,21 @@
         right: 'dayGridMonth,listWeek'
       },
       navLinks: true,
-      events: "{% url 'sesiones_api' %}",
+      events: {
+        url: "{% url 'sesiones_api' %}",
+        method: 'GET',
+        failure: function() {
+          alert('Error al cargar eventos');
+        },
+        success: function(data) {
+          console.log("Eventos cargados correctamente:", data);
+        }
+      },
+      fetchOptions: {
+        credentials: 'same-origin'  // 👈 Esto asegura que se envíen las cookies de sesión
+      },
       eventColor: '#378006',
       eventClick: function(info) {
-        // Aquí podrías redirigir a la edición de la sesión
         window.location.href = `/sesiones/editar/${info.event.id}/`;
       }
     });
@@ -46,4 +59,5 @@
     calendar.render();
   });
 </script>
+
 {% endblock %}

@@ -8,6 +8,8 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.dateparse import parse_date
 from django.db import IntegrityError
+from datetime import datetime, timedelta
+from django.utils.timezone import make_aware
 
 
 User = get_user_model()
@@ -19,24 +21,30 @@ def calendario_sesiones(request):
 
 @login_required
 def sesiones_api(request):
-    # API para que fullcalendar pida las sesiones en JSON
     user = request.user
     if user.is_staff or (hasattr(user, 'perfilusuario') and user.perfilusuario.rol == 'admin'):
         sesiones = SesionMeditacion.objects.all()
     else:
         sesiones = SesionMeditacion.objects.filter(usuario=user)
-    
+
     eventos = []
     for ses in sesiones:
+        start_date = ses.fecha
+        start_dt = datetime.combine(start_date, datetime.min.time())
+        start_dt = make_aware(start_dt)
+        end_dt = start_dt + timedelta(minutes=ses.duracion_minutos)
+
         eventos.append({
             'id': ses.id,
             'title': f"{ses.proposito.nombre if ses.proposito else 'Sin propósito'} - {ses.calificacion}/10",
-            'start': ses.fecha.isoformat(),
-            'duration': ses.duracion_minutos,
-            'allDay': True,
+            'start': start_dt.isoformat(),
+            'end': end_dt.isoformat(),
+            'allDay': False,
             'color': '#4caf50' if ses.calificacion >= 7 else '#f44336',
         })
+
     return JsonResponse(eventos, safe=False)
+
 
 @login_required
 def sesiones_list(request):

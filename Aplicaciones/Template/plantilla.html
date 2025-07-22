@@ -11,7 +11,9 @@
   <!-- Plugins -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" />
+
 
   <!-- Estilos personalizados para modo oscuro -->
   <style>
@@ -264,7 +266,73 @@
     body.theme-dark main.container-fluid {
       background-color: #181a1b !important;
     }
+      
+    /* Mejorar contraste del texto en Bootstrap Select modo oscuro */
+    body.theme-dark .bootstrap-select .btn {
+      color: #fff !important;
+      background-color: #252525 !important;
+      border-color: #444 !important;
+    }
+
+    body.theme-dark .bootstrap-select .btn .filter-option {
+      color: #fff !important;
+    }
+
+    body.theme-dark .bootstrap-select .dropdown-menu {
+      background-color: #2a2a2a !important;
+      border-color: #444 !important;
+      color: #fff !important;
+    }
+
+    body.theme-dark .bootstrap-select .dropdown-menu .dropdown-item {
+      color: #ddd !important;
+    }
+
+    body.theme-dark .bootstrap-select .dropdown-menu .dropdown-item:hover,
+    body.theme-dark .bootstrap-select .dropdown-menu .dropdown-item.active {
+      background-color: #444 !important;
+      color: #fff !important;
+    }
+
+    /* Campo búsqueda en Bootstrap Select */
+    body.theme-dark .bootstrap-select .bs-searchbox input.form-control {
+      background-color: #252525 !important;
+      border-color: #444 !important;
+      color: #fff !important;
+    }
+
+    /* DataTables búsqueda y paginación */
+    body.theme-dark .dataTables_filter input,
+    body.theme-dark .dataTables_length select {
+      background-color: #252525 !important;
+      border: 1px solid #444 !important;
+      color: #fff !important;
+    }
+
+    /* Botones de exportación DataTables */
+    body.theme-dark .dt-button {
+      background-color: #252525 !important;
+      border: 1px solid #444 !important;
+      color: #fff !important;
+    }
+
+    body.theme-dark .dt-button:hover {
+      background-color: #444 !important;
+      color: #fff !important;
+    }
+
+
   </style>
+  <style>
+    .error{
+      color:red;
+      font-weight: bold
+    }
+    .form-control.error{
+      border: 1px solid red;
+    }
+  </style>
+
 </head>
 
 <body id="mainBody" class="theme-light">
@@ -334,12 +402,7 @@
                 <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
                 <span class="hide-menu">MI MEDITACIÓN</span>
               </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link" href="{% url 'propositos' %}">
-                  <iconify-icon icon="solar:target-bold-duotone" class="fs-6"></iconify-icon>
-                  <span class="hide-menu">Mis Propósitos</span>
-                </a>
-              </li>
+
               <li class="sidebar-item">
                 <a class="sidebar-link" href="{% url 'sesiones_list' %}">
                   <iconify-icon icon="solar:meditation-bold-duotone" class="fs-6"></iconify-icon>
@@ -379,20 +442,39 @@
   <div class="body-wrapper">
     <header class="app-header">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item d-flex align-items-center me-3">
-            <label class="form-check form-switch m-0">
-              <input class="form-check-input" type="checkbox" id="modoOscuroToggle">
-              <span class="ms-2">Modo Oscuro</span>
-            </label>
-          </li>
-        </ul>
+        <div class="container-fluid">
+          <!-- Botón hamburguesa para móvil -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarContent"
+            aria-controls="navbarContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            <ul class="navbar-nav align-items-center">
+              <li class="nav-item d-flex align-items-center me-3">
+                <label class="form-check form-switch m-0">
+                  <input class="form-check-input" type="checkbox" id="modoOscuroToggle" />
+                  <span class="ms-2">Modo Oscuro</span>
+                </label>
+              </li>
+            </ul>
+          </div>
+        </div>
       </nav>
     </header>
 
+
     <!-- Contenido -->
     <main class="container-fluid mt-4">
-      {% block content %}{% endblock %}
+      {% block content %}
+      {% endblock %}
     </main>
   </div>
 </div>
@@ -406,8 +488,15 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
     {% if messages%}
          {%for mensaje in messages%}
@@ -425,12 +514,14 @@
   document.addEventListener("DOMContentLoaded", function () {
     const toggle = document.getElementById("modoOscuroToggle");
     const body = document.getElementById("mainBody");
+
     const modo = localStorage.getItem("modo");
     if (modo === "oscuro") {
       body.classList.remove("theme-light");
       body.classList.add("theme-dark");
       toggle.checked = true;
     }
+
     toggle.addEventListener("change", function () {
       if (toggle.checked) {
         body.classList.replace("theme-light", "theme-dark");
@@ -439,11 +530,16 @@
         body.classList.replace("theme-dark", "theme-light");
         localStorage.setItem("modo", "claro");
       }
+
+      // Refrescar Bootstrap Select para aplicar nuevos estilos al dropdown
+      $('.selectpicker').selectpicker('refresh');
     });
   });
 
 </script>
 
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+
+{% endblock %}
 </body>
 </html>

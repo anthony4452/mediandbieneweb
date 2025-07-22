@@ -26,13 +26,13 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 INSTALLED_APPS = [
+    'Aplicaciones.Usuarios',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Aplicaciones.Usuarios',
     'Aplicaciones.Proposito',
     'Aplicaciones.SesionMeditacion',
 ]
@@ -78,7 +78,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mediandbieneweb',
+            'NAME': 'mediandbienedb',
             'USER': 'postgres',
             'PASSWORD': 'anthoo',
             'HOST': '127.0.0.1',

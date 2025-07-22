@@ -33,7 +33,7 @@
                     <td class="text-center">{{ p.created_at|date:"d/m/Y H:i" }}</td>
                     <td class="text-center">{{ p.updated_at|date:"d/m/Y H:i" }}</td>
                     <td class="text-center">
-                        <a href="{% url 'editar_proposito' p.id %}" class="btn btn-sm btn-warning me-2" title="Editar">
+                        <a href="{% url 'editar_proposito' p.id %}" class="btn btn-sm btn-outline-warning" title="Editar">
                             <i class="fa fa-edit"></i> Editar
                         </a>
                         <a href="#" onclick="EliminarProposito('{{ p.id }}')" class="btn btn-sm btn-outline-danger" title="Eliminar">

@@ -10,6 +10,7 @@ from django.utils.dateparse import parse_date
 from django.db import IntegrityError
 from datetime import datetime, timedelta
 from django.utils.timezone import make_aware
+from django.utils.timezone import now
 
 
 User = get_user_model()
@@ -82,16 +83,6 @@ def guardarSesion(request):
             messages.error(request, "Duración y calificación deben ser números válidos")
             return redirect('nuevo_sesion')
 
-        sesion = SesionMeditacion.objects.create(
-            usuario=usuario,
-            proposito=proposito,
-            fecha=fecha,
-            duracion_minutos=duracion,
-            calificacion=calificacion
-        )
-
-        # Enviar correo con la sesión recién creada
-        enviar_correo_sesion(sesion)
 
         messages.success(request, "Sesión guardada correctamente")
         return redirect('calendario_sesiones')
@@ -171,3 +162,13 @@ def eliminarSesion(request, id):
         return redirect('sesiones_list')
     
 
+@login_required
+def calendario_sesiones(request):
+    user = request.user
+    # Obtener la próxima sesión del usuario (fecha >= ahora)
+    proxima_sesion = SesionMeditacion.objects.filter(
+        usuario=user,
+        fecha__gte=now()
+    ).order_by('fecha').first()  # la más cercana en el futuro
+
+    return render(request, 'calendario_sesiones.html', {'proxima_sesion': proxima_sesion})

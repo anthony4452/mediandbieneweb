@@ -35,7 +35,7 @@
           <td class="text-center">{{ s.duracion_minutos }}</td>
           <td class="text-center">{{ s.calificacion }}/10</td>
           <td class="text-center">
-            <a href="{% url 'editar_sesion' s.id %}" class="btn btn-sm btn-warning me-2" title="Editar">
+            <a href="{% url 'editar_sesion' s.id %}" class="btn btn-outline-warning" title="Editar">
               <i class="fa fa-edit"></i> Editar
             </a>
             <a href="#" onclick="EliminarSesion('{{ s.id }}')" class="btn btn-outline-danger" title="Eliminar">

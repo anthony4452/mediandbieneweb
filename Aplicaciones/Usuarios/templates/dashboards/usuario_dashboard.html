@@ -99,27 +99,35 @@
       </div>
     </div>
 
-    <!-- Próxima Sesión -->
-    <div class="col-lg-4">
-      <div class="card border-info">
-        <div class="card-header bg-info text-white">
-          <h6 class="card-title mb-0">
-            <iconify-icon icon="solar:clock-circle-bold" class="me-2"></iconify-icon>
-            Próxima Sesión
-          </h6>
-        </div>
-        <div class="card-body text-center">
-          <iconify-icon icon="solar:calendar-mark-bold-duotone" class="fs-2 text-info mb-2"></iconify-icon>
-          <p class="mb-1">No tienes sesiones programadas</p>
-          <small class="text-muted">¡Programa tu próxima sesión de meditación!</small>
-          <div class="mt-3">
-            <a href="{% url 'nuevo_sesion' %}" class="btn btn-sm btn-info">
-              Programar Ahora
-            </a>
-          </div>
-        </div>
+<div class="col-lg-4">
+  <div class="card border-info">
+    <div class="card-header bg-info text-white">
+      <h6 class="card-title mb-0">
+        <iconify-icon icon="solar:clock-circle-bold" class="me-2"></iconify-icon>
+        Próxima Sesión
+      </h6>
+    </div>
+    <div class="card-body text-center">
+      <iconify-icon icon="solar:calendar-mark-bold-duotone" class="fs-2 text-info mb-2"></iconify-icon>
+      
+      {% if proxima_sesion %}
+        <p class="mb-1">Tu próxima sesión es el <strong>{{ proxima_sesion.fecha|date:"d/m/Y H:i" }}</strong></p>
+        <small class="text-muted">¡Disfruta tu meditación!</small>
+      {% else %}
+        <p class="mb-1">No tienes sesiones programadas</p>
+        <small class="text-muted">¡Programa tu próxima sesión de meditación!</small>
+      {% endif %}
+      
+      <div class="mt-3">
+        <a href="{% url 'nuevo_sesion' %}" class="btn btn-sm btn-info">
+          Programar Ahora
+        </a>
       </div>
     </div>
+  </div>
+</div>
+
+
   </div>
 </div>
 {% endblock %}

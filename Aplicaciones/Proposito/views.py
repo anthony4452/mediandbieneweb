@@ -44,7 +44,20 @@ def guardarProposito(request):
 @user_passes_test(es_admin)
 def editarProposito(request, id):
     proposito = get_object_or_404(Proposito, pk=id)
-    return render(request, 'editarProposito.html', {'proposito': proposito})
+
+    categorias = [
+        "Salud",
+        "Trabajo",
+        "Espiritualidad",
+        "Educación",
+        "Relaciones",
+    ]
+
+    return render(request, 'editarProposito.html', {
+        'proposito': proposito,
+        'categorias': categorias,
+    })
+
 
 @login_required
 @user_passes_test(es_admin)

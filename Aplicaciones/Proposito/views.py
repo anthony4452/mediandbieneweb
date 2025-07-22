@@ -36,9 +36,9 @@ def guardarProposito(request):
         )
 
         messages.success(request, "Se ha guardado el propósito correctamente")
-        return redirect('/propositos')
+        return redirect('propositos')
     else:
-        return redirect('/propositos/nuevoProposito/')
+        return redirect('nuevoProposito/')
 
 @login_required
 @user_passes_test(es_admin)
@@ -60,9 +60,9 @@ def guardarEdicionProposito(request, id):
         proposito.save()
 
         messages.success(request, "Propósito actualizado correctamente")
-        return redirect('/propositos')
+        return redirect('propositos')
     else:
-        return redirect('/propositos')
+        return redirect('propositos')
 
 @login_required
 @user_passes_test(es_admin)
@@ -70,4 +70,4 @@ def eliminarProposito(request, id):
     proposito = get_object_or_404(Proposito, pk=id)
     proposito.delete()
     messages.success(request, "Propósito eliminado correctamente")
-    return redirect('/propositos')
+    return redirect('propositos')

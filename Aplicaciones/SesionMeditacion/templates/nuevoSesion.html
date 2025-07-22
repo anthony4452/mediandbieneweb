@@ -47,14 +47,14 @@
 </div>
 {% endblock %}
 
-{% block extra_js %}
 <!-- Bootstrap Select CSS y JS deben estar cargados en tu plantilla base -->
+{% block extra_js %}
 <script>
   $(document).ready(function () {
     // Inicializa Bootstrap Select
     $('#proposito').selectpicker();
 
-    // Validación formulario con jQuery Validate
+    // Validación con SweetAlert spinner
     $("#frm_nueva_sesion").validate({
       rules: {
         proposito: { required: true },
@@ -77,8 +77,23 @@
       },
       unhighlight: function(element) {
         $(element).removeClass("is-invalid");
+      },
+      submitHandler: function (form) {
+        // Mostrar spinner con SweetAlert
+        Swal.fire({
+          title: 'Guardando...',
+          html: 'Por favor espere un momento',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        form.submit(); // Enviar formulario real
       }
     });
   });
 </script>
 {% endblock %}
+

@@ -498,6 +498,8 @@
          {%endfor%}
     {%endif%}
 
+    
+
 <script>
   function AvisoTrabajo() {
     Swal.fire("Estamos trabajando en este apartado", "¡Gracias por su colaboración!", "info");
@@ -550,6 +552,24 @@
   });
 
 </script>
-{% block extra_js %}{% endblock %}
+
+<script>
+  $(document).ready(function () {
+    $("form.form-con-spinner").on("submit", function () {
+      Swal.fire({
+        title: 'Guardando...',
+        html: 'Por favor espere un momento',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    });
+  });
+</script>  
+{% block extra_js %}
+
+{% endblock %}
 </body>
 </html>

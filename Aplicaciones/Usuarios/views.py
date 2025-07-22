@@ -52,10 +52,14 @@ def login_view(request):
 
     return render(request, 'login.html')
 
+
+
 @login_required
 def admin_dashboard(request):
     if request.user.rol != 'ADMINISTRADOR':
         return HttpResponseForbidden("No tienes permiso.")
+
+    messages.success(request, f"Bienvenido {request.user.username} al panel de administración.")
     return render(request, 'dashboards/admin_dashboard.html')
 
 
@@ -63,7 +67,11 @@ def admin_dashboard(request):
 def usuario_dashboard(request):
     if request.user.rol != 'USUARIO':
         return HttpResponseForbidden("No tienes permiso.")
+
+    messages.success(request, f"Bienvenido {request.user.username} al panel de usuario.")
     return render(request, 'dashboards/usuario_dashboard.html')
+
+
 
 @login_required
 def dashboard_redirect(request):

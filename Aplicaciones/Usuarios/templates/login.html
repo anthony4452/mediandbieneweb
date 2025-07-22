@@ -37,11 +37,7 @@
                   <a class="text-primary fw-bold ms-2" href="{% url 'register' %}">Regístrate</a>
                 </div>
               </form>
-              {% if messages %}
-                {% for message in messages %}
-                  <div class="alert alert-danger mt-3">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
+
             </div>
           </div>
         </div>
@@ -52,10 +48,49 @@
 <script src="{% static 'plantilla/seodash/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'plantilla/seodash/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
-<script>
-  document.getElementById('mi-formulario').addEventListener('submit', function () {
-    document.getElementById('spinner').style.display = 'block';
-  });
-</script>
 </body>
 </html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  // Mensajes flash de Django (éxito o error)
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.tags == 'success' %}
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "{{ message }}",
+          showConfirmButton: false,
+          timer: 2000
+        });
+      {% elif message.tags == 'error' %}
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "{{ message }}"
+        });
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  // Spinner/cargando al enviar el formulario
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function (e) {
+      Swal.fire({
+        title: 'Iniciando sesión...',
+        text: 'Por favor espera un momento',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    });
+  });
+</script>
+
+

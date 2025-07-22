@@ -57,6 +57,20 @@
 {% endblock %}
 
 {% block extra_js %}
+{% if messages %}
+<script>
+  $(document).ready(function () {
+    {% for message in messages %}
+      Swal.fire({
+        icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% else %}info{% endif %}",
+        title: "{{ message }}",
+        showConfirmButton: true,
+        timer: 3500
+      });
+    {% endfor %}
+  });
+</script>
+{% endif %}
 
 <script>
   $(document).ready(function() {

@@ -22,13 +22,6 @@
               </a>
               <p class="text-center">Crea tu cuenta</p>
 
-              <!-- Mostrar mensajes -->
-              {% if messages %}
-                {% for message in messages %}
-                  <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-
               <form method="POST" action="{% url 'register' %}">
                 {% csrf_token %}
                 <div class="mb-3">
@@ -64,3 +57,46 @@
 <script src="{% static 'plantilla/seodash/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  // Mensajes flash de Django (éxito o error)
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.tags == 'success' %}
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "{{ message }}",
+          showConfirmButton: false,
+          timer: 2000
+        });
+      {% elif message.tags == 'error' %}
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "{{ message }}"
+        });
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  // Spinner/cargando al enviar el formulario
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function (e) {
+      Swal.fire({
+        title: 'Registrando...',
+        text: 'Por favor espera un momento',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    });
+  });
+</script>
+

@@ -58,6 +58,7 @@ def nuevaSesion(request):
     propositos = Proposito.objects.filter(activo=True).order_by('nombre')
     return render(request, 'nuevoSesion.html', {'propositos': propositos})
 
+
 @login_required
 def guardarSesion(request):
     if request.method == "POST":
@@ -71,20 +72,34 @@ def guardarSesion(request):
         if proposito_id:
             proposito = get_object_or_404(Proposito, pk=proposito_id)
 
-        # Validaciones básicas
         if not fecha or not duracion or not calificacion:
             messages.error(request, "Por favor complete todos los campos obligatorios")
             return redirect('nuevo_sesion')
 
+        # Convertimos valores
         try:
             duracion = int(duracion)
             calificacion = int(calificacion)
+            fecha = datetime.strptime(fecha, "%Y-%m-%d").date()
         except ValueError:
-            messages.error(request, "Duración y calificación deben ser números válidos")
+            messages.error(request, "Datos inválidos. Verifique la fecha, duración o calificación.")
             return redirect('nuevo_sesion')
 
+        # Guardar sesión
+        try:
+            SesionMeditacion.objects.create(
+                usuario=usuario,
+                proposito=proposito,
+                fecha=fecha,
+                duracion_minutos=duracion,
+                calificacion=calificacion
+            )
+            messages.success(request, "Sesión guardada correctamente")
+        except Exception as e:
+            print(f"Error al guardar sesión: {e}")  # Para desarrollo
+            messages.error(request, "No se pudo guardar la sesión. Verifique los datos.")
+            return redirect('nuevo_sesion')
 
-        messages.success(request, "Sesión guardada correctamente")
         return redirect('calendario_sesiones')
     else:
         return redirect('nuevo_sesion')
